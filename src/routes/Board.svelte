@@ -33,17 +33,17 @@
 	}
 
 	.black {
-		border-radius: 5px;
 		border: 1px solid var(--black-square-border);
+		border-radius: 5px;
 	}
 	.white {
 		background-color: var(--white-square);
 		border-radius: 5px;
 	}
 
-    .square {
-        cursor: pointer;
-    }
+	.square {
+		cursor: pointer;
+	}
 
 	#board {
 		gap: 2px;
@@ -56,5 +56,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	@media (max-width: 500px) {
+		#board {
+			gap: 0px;
+            grid-template-columns: repeat(8, 34px);
+		    grid-template-rows: repeat(8, 34px);
+		}
 	}
 </style>

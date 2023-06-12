@@ -11,8 +11,23 @@ export class Piece {
 }
 
 export class Pawn extends Piece {
-    showMoves() {
+    constructor(x, y, white) {
+        super(x, y, white)
+        this.moves = {
+            f: 1,
+        }
+    }
+
+    getMoves(board) {
+        this.conditions(board)      
+
         console.log("SHOW")
+        return []
+    }
+
+    conditions(board) {
+        if(this.y == 1 || this.y == 6) 
+            this.moves.f = 2 
     }
 }
 
@@ -20,17 +35,11 @@ export class Bishop extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'b')
     }
-    showMoves() {
-        console.log("SHOW")
-    }
 }
 
 export class Knight extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'k')
-    }
-    showMoves() {
-        console.log("SHOW")
     }
 }
 
@@ -38,26 +47,17 @@ export class Rook extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'r')
     }
-    showMoves() {
-        console.log("SHOW")
-    }
 }
 
 export class Queen extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'q')
     }
-    showMoves() {
-        console.log("SHOW")
-    }
 }
 
 export class King extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'K')
-    }
-    showMoves() {
-        console.log("SHOW")
     }
 }
 
@@ -67,23 +67,24 @@ export class Board {
         for (let i = 0; i < 8; i++) {
             if (i == 0) {
                 board[0] = [
-                    new Rook(0, 0, !white), new Knight(0, 1, !white,),
-                    new Bishop(0, 2, !white), new Queen(0, 3, !white),
-                    new King(0, 4, !white), new Bishop(0, 5, !white),
-                    new Knight(0, 6, !white), new Rook(0, 7, !white)]
+                    new Rook(0, 0, !white), new Knight(1, 0, !white,),
+                    new Bishop(2, 0, !white), new Queen(3, 0, !white),
+                    new King(4, 0, !white), new Bishop(5, 0, !white),
+                    new Knight(6, 0, !white), new Rook(7, 0, !white)]
                 board[7] = [
-                    new Rook(7, 0, white), new Knight(7, 1, white),
-                    new Bishop(7, 2, white), new Queen(7, 3, white),
-                    new King(7, 4, white), new Bishop(7, 5, white),
-                    new Knight(7, 6, white), new Rook(7, 7, white)]
+                    new Rook(0, 7, white), new Knight(1, 7, white),
+                    new Bishop(2, 7, white), new Queen(3, 7, white),
+                    new King(4, 7, white), new Bishop(5, 7, white),
+                    new Knight(6, 7, white), new Rook(7, 7, white)]
             }
             if ([2, 3, 4, 5].some(n => n == i))
                 for (let k = 0; k < 8; k++)
                     board[i].push(null)
-            board[1].push(new Pawn(1, i, !white))
-            board[6].push(new Pawn(6, i, white))
+            board[1].push(new Pawn(i, 1, !white))
+            board[6].push(new Pawn(i, 6, white))
         }
         this.board = board
+        this.check = false 
         this.activePiece = null
     }
 
@@ -100,13 +101,18 @@ export class Board {
                     p.showMoves = !p.showMoves
                 return p
             })
+            this.showMoves() 
         } else {
             if (piece.white !== this.activePiece.white)
                 this.take(piece, this.activePiece)
         }
     }
 
-    move(piece,) {
+    showMoves() {
+        // When click on a piece, show posible moves 
+    }
+
+    move(piece) {
         console.log("MOVE")
     }
 
@@ -117,11 +123,15 @@ export class Board {
         console.log("TAKE")
     }
 
-    isValidMove(piece, pos) {
-
+    locateCheck() {
+        // See if there is a check or mate  
     }
 
-    get showBoard() {
-        return this.board
+    coronate(pawn) {
+        // Coronate a pawn
+    }
+
+    isValidMove(piece, pos) {
+
     }
 }

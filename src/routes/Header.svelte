@@ -1,7 +1,9 @@
 <header>
 	<div>
 		<h1>Chess test board</h1>
-		<h2>by lucasfurtado.es</h2>
+		<a href="https://lucasfurtado.es" target="_blank">
+			by lucasfurtado.es
+		</a>
 	</div>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
@@ -31,6 +33,14 @@
 </header>
 
 <style>
+	header>div>a {
+		color: #777;
+		font-size: 18px;
+		font-weight: 100;
+		font-family: 'main';
+		text-decoration: none;
+	}
+
 	header {
 		display: flex;
 		align-items: center;
