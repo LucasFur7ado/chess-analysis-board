@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'main';
+    src: url('$lib/assets/fonts/coolvetic.otf');
+}
+
+:root {
+    --white: rgb(0, 238, 255);
+    --black: rgb(255, 0, 85);
+    --black-square-border: #fff0;
+    --white-square: #202020;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+h1 {
+    font-family: 'main';
+    font-size: 25px;
+    font-weight: 100;
+}
+
+h2 {
+    font-family: 'main';
+    font-weight: 100;
+    font-size: 18px;
+    color: #777;
+}
+
+header {
+    padding-bottom: 20px;
+}
