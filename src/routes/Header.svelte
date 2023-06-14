@@ -1,6 +1,6 @@
 <header>
 	<div>
-		<h1>Chess test board</h1>
+		<h1>Chess analysis board</h1>
 		<a href="https://lucasfurtado.es" target="_blank">
 			by lucasfurtado.es
 		</a>

@@ -1,33 +1,55 @@
-import { activePiece } from '$lib/store.js'
+import { activePiece, possibleMoves } from '$lib/store.js'
 
 export class Piece {
     constructor(x, y, white = false, type = 'p') {
         this.type = type
-        this.pos = [x, y]
+        this.pos = { x, y }
         this.showMoves = false
         this.id = Math.random()
         this.white = Boolean(white)
+    }
+
+    getMoves(board) {
+        this.conditions(board)
+        let moves = []
+        this.moves.map(m => {
+            if (m.dir == 'f') {
+                for (let i = 1; i < m.steps + 1; i++) {
+                    if (board[this.pos.y - i][this.pos.x] !== null) {
+                        break
+                    } else {
+                        moves.push({
+                            y: this.pos.y - i,
+                            x: this.pos.x
+                        })
+                    }
+                }
+            }
+        })
+        return moves
     }
 }
 
 export class Pawn extends Piece {
     constructor(x, y, white) {
         super(x, y, white)
-        this.moves = {
-            f: 1,
-        }
-    }
-
-    getMoves(board) {
-        this.conditions(board)      
-
-        console.log("SHOW")
-        return []
+        this.moves = [
+            {
+                dir: 'f',
+                steps: 1
+            }
+        ]
     }
 
     conditions(board) {
-        if(this.y == 1 || this.y == 6) 
-            this.moves.f = 2 
+        if (this.pos.y == 1 || this.pos.y == 6)
+            this.moves = this.moves.map(m => {
+                if (m.dir == 'f') return {
+                    ...m,
+                    steps: 2
+                }
+                return m
+            })
     }
 }
 
@@ -84,14 +106,16 @@ export class Board {
             board[6].push(new Pawn(i, 6, white))
         }
         this.board = board
-        this.check = false 
+        this.check = false
         this.activePiece = null
+        this.possibleMoves = null
     }
 
     pieceClick(piece) {
-        console.log("click")
         if (piece == null) {
             this.activePiece = null
+            this.possibleMoves = null
+            possibleMoves.set(null)
             activePiece.set(null)
         } else if (this.activePiece == null || this.activePiece.white == piece.white) {
             this.activePiece = this.activePiece?.id == piece.id ? null : piece
@@ -101,7 +125,7 @@ export class Board {
                     p.showMoves = !p.showMoves
                 return p
             })
-            this.showMoves() 
+            this.showMoves()
         } else {
             if (piece.white !== this.activePiece.white)
                 this.take(piece, this.activePiece)
@@ -109,7 +133,9 @@ export class Board {
     }
 
     showMoves() {
-        // When click on a piece, show posible moves 
+        const moves = this.activePiece.getMoves(this.board)
+        this.possibleMoves = moves
+        possibleMoves.set(moves)
     }
 
     move(piece) {

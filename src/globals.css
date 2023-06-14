@@ -4,10 +4,12 @@
 }
 
 :root {
+    --background: #1a1a1a;
     --white: rgb(0, 238, 255);
     --black: rgb(255, 0, 85);
     --black-square-border: #fff0;
     --white-square: #202020;
+    --dot: #353535;
 }
 
 * {
@@ -17,7 +19,7 @@
 }
 
 body {
-    background-color: #1a1a1a;
+    background-color: var(--background);
     color: white;
 }
 
