@@ -10,7 +10,7 @@
 				<!-- Empty square -->
 				<div
 					on:keyup={null}
-					on:click={() => $board.pieceClick(null, { x, y })}
+					on:click={() => $board.pieceController(null, { x, y })}
 					class={(y + x) % 2 == 0 ? 'white' : 'black'}>
 					{#if ($board.possibleMoves !== null 
 					&& $board.possibleMoves.find(m => (m.y == y && m.x == x)))}
@@ -21,7 +21,7 @@
 				<!-- Piece -->
 				<div
 					on:keyup={null}
-					on:click={() => $board.pieceClick(piece)}
+					on:click={() => $board.pieceController(piece)}
 					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
                 	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}
