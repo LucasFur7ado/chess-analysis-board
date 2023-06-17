@@ -103,7 +103,7 @@ export class Board {
         active.pos = { x: toBeTaken.pos.x, y: toBeTaken.pos.y }
         toBeTaken = undefined
         this.activePiece = null
-        this.possibleMoves = null 
+        this.possibleMoves = null
         board.set(this)
     }
 
@@ -132,6 +132,13 @@ export class Piece {
         this.conditions(board)
         let moves = []
         this.moves.map(m => {
+            if (m.dir == 'xy') {
+                const y = this.white ? (this.pos.y - m.coor.y) : (this.pos.y + m.coor.y)
+                const x = this.white ? (this.pos.x - m.coor.x) : (this.pos.x + m.coor.x)
+                if ((y >= 0 && x >= 0 && y < 8 && x < 8) && board[y][x] == null) {
+                    moves.push({ y, x })
+                }
+            }
             if (m.dir == 'f') {
                 for (let i = 1; i < m.steps + 1; i++) {
                     const y = this.white ? (this.pos.y - i) : (this.pos.y + i)
@@ -214,15 +221,80 @@ export class Pawn extends Piece {
     }
 }
 
-export class Bishop extends Piece {
-    constructor(x, y, white) {
-        super(x, y, white, 'b')
-    }
-}
-
 export class Knight extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'k')
+    }
+
+    resetMoves() {
+        this.moves = [
+            {
+                dir: 'xy',
+                coor: {
+                    x: -2,
+                    y: -1
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: -1,
+                    y: -2
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: +1,
+                    y: -2
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: +2,
+                    y: -1
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: +2,
+                    y: +1
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: +1,
+                    y: +2
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: -1,
+                    y: +2
+                }
+            },
+            {
+                dir: 'xy',
+                coor: {
+                    x: -2,
+                    y: +1
+                }
+            }
+        ]
+    }
+
+    conditions() {
+        this.resetMoves()
+    }
+}
+
+export class Bishop extends Piece {
+    constructor(x, y, white) {
+        super(x, y, white, 'b')
     }
 }
 
