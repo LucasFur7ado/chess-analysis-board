@@ -1,27 +1,32 @@
-import { activePiece, possibleMoves } from '$lib/store.js'
+import { board } from '$lib/store.js'
+import { nanoid } from 'nanoid'
+
+export class Config {
+    constructor() {
+        this.freeMode = false
+    }
+}
 
 export class Piece {
     constructor(x, y, white = false, type = 'p') {
         this.type = type
+        this.id = nanoid()
         this.pos = { x, y }
-        this.showMoves = false
-        this.id = Math.random()
         this.white = Boolean(white)
     }
 
     getMoves(board) {
         this.conditions(board)
+        console.log("MOVES =>Z ", this.moves)
         let moves = []
         this.moves.map(m => {
             if (m.dir == 'f') {
                 for (let i = 1; i < m.steps + 1; i++) {
-                    if (board[this.pos.y - i][this.pos.x] !== null) {
+                    const y = this.white ? (this.pos.y - i) : (this.pos.y + i)
+                    if (board[y][this.pos.x] !== null) {
                         break
                     } else {
-                        moves.push({
-                            y: this.pos.y - i,
-                            x: this.pos.x
-                        })
+                        moves.push({ y, x: this.pos.x })
                     }
                 }
             }
@@ -31,8 +36,7 @@ export class Piece {
 }
 
 export class Pawn extends Piece {
-    constructor(x, y, white) {
-        super(x, y, white)
+    resetMoves() {
         this.moves = [
             {
                 dir: 'f',
@@ -42,7 +46,8 @@ export class Pawn extends Piece {
     }
 
     conditions(board) {
-        if (this.pos.y == 1 || this.pos.y == 6)
+        this.resetMoves()
+        if (this.pos.y == 1 || this.pos.y == 6) {
             this.moves = this.moves.map(m => {
                 if (m.dir == 'f') return {
                     ...m,
@@ -50,6 +55,18 @@ export class Pawn extends Piece {
                 }
                 return m
             })
+        }
+        const sum = (this.white ? 1 : -1)
+        if(board[this.pos.y - sum][this.pos.x + sum]) {
+            console.log("DIAGNAL")
+            this.moves = [
+                ...this.moves,
+                {
+                    dir: 'fr',
+                    steps: 1
+                }
+            ]
+        }
     }
 }
 
@@ -109,44 +126,49 @@ export class Board {
         this.check = false
         this.activePiece = null
         this.possibleMoves = null
+        this.config = new Config()
     }
 
-    pieceClick(piece) {
-        if (piece == null) {
+    pieceClick(piece, coor = false) {
+        const validMove = this?.possibleMoves?.find(m => ((m.x == coor.x) && (m.y == coor.y)))
+        if (this.possibleMoves !== null && validMove)
+            this.move(coor)
+        else if (piece == null || (piece?.id == this.activePiece?.id)) {
             this.activePiece = null
             this.possibleMoves = null
-            possibleMoves.set(null)
-            activePiece.set(null)
+            board.set(this)
         } else if (this.activePiece == null || this.activePiece.white == piece.white) {
             this.activePiece = this.activePiece?.id == piece.id ? null : piece
-            activePiece.set(this.activePiece)
-            this.board = this.board.map(p => {
-                if (p.id == piece.id)
-                    p.showMoves = !p.showMoves
-                return p
-            })
+            board.set(this)
             this.showMoves()
         } else {
-            if (piece.white !== this.activePiece.white)
-                this.take(piece, this.activePiece)
+            if (piece.white !== this.activePiece.white && validMove)
+                this.take(this.activePiece, piece)
         }
     }
 
     showMoves() {
         const moves = this.activePiece.getMoves(this.board)
         this.possibleMoves = moves
-        possibleMoves.set(moves)
+        board.set(this)
     }
 
-    move(piece) {
-        console.log("MOVE")
-    }
-
-    take(active, taken) {
-        console.log("A => ", active, taken)
+    move(coor) {
+        this.board[this.activePiece.pos.y][this.activePiece.pos.x] = null
+        this.board[coor.y][coor.x] = this.activePiece
+        this.activePiece.pos = { x: coor.x, y: coor.y }
         this.activePiece = null
-        activePiece.set(null)
-        console.log("TAKE")
+        this.possibleMoves = null
+        board.set(this)
+    }
+
+    take(active, toBeTaken) {
+        this.board[active.pos.y][active.pos.x] = null
+        this.board[toBeTaken.pos.y][toBeTaken.pos.x] = active
+        active.pos = { x: toBeTaken.pos.x, y: toBeTaken.pos.y }
+        toBeTaken = undefined
+        this.activePiece = null
+        board.set(this)
     }
 
     locateCheck() {

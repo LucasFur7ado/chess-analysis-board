@@ -1,30 +1,29 @@
 <script>
-	import { activePiece, possibleMoves } from '$lib/store.js'
+	import { board } from '$lib/store.js'
 	import { returnSvg } from '$lib/services/returnSvg.js'
-	import { Board } from '$lib/js/classes'
-
-	const board = new Board(true)
 </script>
 
 <div id="board">
-	{#each board.board as line, i1}
-		{#each line as piece, i2}
+	{#each $board.board as line, y}
+		{#each line as piece, x}
 			{#if piece == null}
+				<!-- Empty square -->
 				<div
 					on:keyup={null}
-					on:click={() => board.pieceClick(null)}
-					class={(i1 + i2) % 2 == 0 ? 'white' : 'black'}>
-					{#if ($possibleMoves !== null 
-					&& $possibleMoves.find(m => (m.y == i1 && m.x == i2)))}
-						{@html returnSvg('dot', (i1 + i2) % 2 == 0)}
+					on:click={() => $board.pieceClick(null, { x, y })}
+					class={(y + x) % 2 == 0 ? 'white' : 'black'}>
+					{#if ($board.possibleMoves !== null 
+					&& $board.possibleMoves.find(m => (m.y == y && m.x == x)))}
+						{@html returnSvg('dot', (y + x) % 2 == 0)}
 					{/if}	
 				</div>
 			{:else}
+				<!-- Piece -->
 				<div
 					on:keyup={null}
-					on:click={() => board.pieceClick(piece)}
-					class={`${(i1 + i2) % 2 == 0 ? 'white' : 'black'} 
-                ${$activePiece?.id == piece?.id ? 'active' : ''} square`}>
+					on:click={() => $board.pieceClick(piece)}
+					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
+                	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}
 				</div>
 			{/if}
@@ -53,6 +52,7 @@
 	#board {
 		gap: 2px;
 		display: grid;
+		position: relative;
 		grid-template-columns: repeat(8, 50px);
 		grid-template-rows: repeat(8, 50px);
 	}

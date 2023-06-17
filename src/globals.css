@@ -5,8 +5,8 @@
 
 :root {
     --background: #1a1a1a;
-    --white: rgb(0, 238, 255);
-    --black: rgb(255, 0, 85);
+    --white: white;
+    --black: rgb(0, 238, 255);
     --black-square-border: #fff0;
     --white-square: #202020;
     --dot: #353535;

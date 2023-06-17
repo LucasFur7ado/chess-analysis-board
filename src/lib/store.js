@@ -1,4 +1,4 @@
-import { writable } from "svelte/store"
+import { Board } from '$lib/js/classes'
+import { writable } from 'svelte/store'
 
-export const activePiece = writable(null)
-export const possibleMoves = writable(null)
+export const board = writable(new Board(true))
