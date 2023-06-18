@@ -1,3 +1,4 @@
+import { diagonalMove } from './functions.js'
 import { board } from '$lib/store.js'
 import { nanoid } from 'nanoid'
 
@@ -83,6 +84,7 @@ export class Board {
         this.activePiece = piece
         const moves = this.activePiece.getMoves(this.board)
         this.possibleMoves = moves
+        console.log("POS IBLE => ", this.possibleMoves)
         board.set(this)
     }
 
@@ -135,14 +137,18 @@ export class Piece {
             if (m.dir == 'xy') {
                 const y = this.white ? (this.pos.y - m.coor.y) : (this.pos.y + m.coor.y)
                 const x = this.white ? (this.pos.x - m.coor.x) : (this.pos.x + m.coor.x)
-                if ((y >= 0 && x >= 0 && y < 8 && x < 8) && board[y][x] == null) {
+                const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
+                if (validCoor && (board[y][x] == null || ((!(board[y][x] == null)
+                    && !(board[y][x].white == this.white))))) {
                     moves.push({ y, x })
                 }
             }
             if (m.dir == 'f') {
                 for (let i = 1; i < m.steps + 1; i++) {
                     const y = this.white ? (this.pos.y - i) : (this.pos.y + i)
-                    if (board[y][this.pos.x] !== null) {
+                    const x = this.pos.x 
+                    const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
+                    if (validCoor && board[y][x] !== null) {
                         break
                     } else {
                         moves.push({ y, x: this.pos.x })
@@ -150,28 +156,16 @@ export class Piece {
                 }
             }
             if (m.dir == 'fr') {
-                for (let i = 1; i < m.steps + 1; i++) {
-                    const y = this.pos.y - (this.white ? i : -i)
-                    const x = this.pos.x + (this.white ? i : -i)
-                    const notNull = (board[y][x] !== null)
-                    if (!notNull || (notNull && !(board[y][x].white == this.white))) {
-                        moves.push({ y, x })
-                    } else {
-                        break
-                    }
-                }
+                diagonalMove(m, this, board, moves, 'fr')
             }
             if (m.dir == 'fl') {
-                for (let i = 1; i < m.steps + 1; i++) {
-                    const y = this.pos.y - (this.white ? i : -i)
-                    const x = this.pos.x - (this.white ? i : -i)
-                    const notNull = (board[y][x] !== null)
-                    if (!notNull || (notNull && !(board[y][x].white == this.white))) {
-                        moves.push({ y, x })
-                    } else {
-                        break
-                    }
-                }
+                diagonalMove(m, this, board, moves, 'fl')
+            }
+            if (m.dir == 'bl') {
+                diagonalMove(m, this, board, moves, 'bl')
+            }
+            if (m.dir == 'br') {
+                diagonalMove(m, this, board, moves, 'br')
             }
         })
         return moves
@@ -181,10 +175,7 @@ export class Piece {
 export class Pawn extends Piece {
     resetMoves() {
         this.moves = [
-            {
-                dir: 'f',
-                steps: 1
-            }
+            { dir: 'f', steps: 1 }
         ]
     }
 
@@ -200,7 +191,10 @@ export class Pawn extends Piece {
             })
         }
         const sum = (this.white ? 1 : -1)
-        if (board[this.pos.y - sum][this.pos.x + sum]) {
+        const y = this.pos.y - sum
+        const x = this.pos.x + sum 
+        const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
+        if (validCoor && board[y][x]) {
             this.moves = [
                 ...this.moves,
                 {
@@ -209,7 +203,7 @@ export class Pawn extends Piece {
                 }
             ]
         }
-        if (board[this.pos.y - sum][this.pos.x - sum]) {
+        if (validCoor && board[y][x]) {
             this.moves = [
                 ...this.moves,
                 {
@@ -228,62 +222,14 @@ export class Knight extends Piece {
 
     resetMoves() {
         this.moves = [
-            {
-                dir: 'xy',
-                coor: {
-                    x: -2,
-                    y: -1
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: -1,
-                    y: -2
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: +1,
-                    y: -2
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: +2,
-                    y: -1
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: +2,
-                    y: +1
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: +1,
-                    y: +2
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: -1,
-                    y: +2
-                }
-            },
-            {
-                dir: 'xy',
-                coor: {
-                    x: -2,
-                    y: +1
-                }
-            }
+            { dir: 'xy', coor: { x: -2, y: -1 } },
+            { dir: 'xy', coor: { x: -1, y: -2 } },
+            { dir: 'xy', coor: { x: +1, y: -2 } },
+            { dir: 'xy', coor: { x: +2, y: -1 } },
+            { dir: 'xy', coor: { x: +2, y: +1 } },
+            { dir: 'xy', coor: { x: +1, y: +2 } },
+            { dir: 'xy', coor: { x: -1, y: +2 } },
+            { dir: 'xy', coor: { x: -2, y: +1 } }
         ]
     }
 
@@ -295,6 +241,19 @@ export class Knight extends Piece {
 export class Bishop extends Piece {
     constructor(x, y, white) {
         super(x, y, white, 'b')
+    }
+
+    resetMoves() {
+        this.moves = [
+            { dir: 'fr', steps: -1 },
+            { dir: 'fl', steps: -1 },
+            { dir: 'br', steps: -1 },
+            { dir: 'bl', steps: -1 },
+        ]
+    }
+
+    conditions() {
+        this.resetMoves()
     }
 }
 
