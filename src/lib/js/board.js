@@ -34,7 +34,6 @@ export class Board {
             board[1].push(new Pawn(i, 1, !white))
             board[6].push(new Pawn(i, 6, white))
         }
-        board[3][4] = new Rook(4, 3, white)
         this.board = board
         this.check = false
         this.activePiece = null
@@ -54,7 +53,6 @@ export class Board {
             return null
         }
         // Show possible moves
-        console.log("1")
         const sameColor = (this.activePiece?.white == piece?.white)
         if (this.activePiece == null || sameColor
             || (piece && !sameColor && !this.possibleMoves?.find(m => {
@@ -64,7 +62,6 @@ export class Board {
             this.showMoves(piece)
             return null
         }
-        console.log("2")
         // Move 
         if (this.possibleMoves !== null && validMove) {
             this.move(coor)
@@ -75,7 +72,6 @@ export class Board {
             if (((m.x == piece.pos.x) && (m.y == piece.pos.y)))
                 return m
         })
-        console.log("VALID => ", validTake)
         if ((piece.white !== this.activePiece.white) && validTake) {
             this.take(this.activePiece, piece)
             return null
@@ -92,12 +88,10 @@ export class Board {
         this.activePiece = piece
         const moves = this.activePiece.getMoves(this.board)
         this.possibleMoves = moves
-        console.log("POS IBLE => ", this.possibleMoves)
         board.set(this)
     }
 
     move(coor) {
-        console.log("MOVE")
         this.board[this.activePiece.pos.y][this.activePiece.pos.x] = null
         this.board[coor.y][coor.x] = this.activePiece
         this.activePiece.pos = { x: coor.x, y: coor.y }
@@ -107,7 +101,6 @@ export class Board {
     }
 
     take(active, toBeTaken) {
-        console.log("TAKE")
         this.board[active.pos.y][active.pos.x] = null
         this.board[toBeTaken.pos.y][toBeTaken.pos.x] = active
         active.pos = { x: toBeTaken.pos.x, y: toBeTaken.pos.y }
