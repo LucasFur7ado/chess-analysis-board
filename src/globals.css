@@ -32,3 +32,11 @@ h1 {
 header {
     padding-bottom: 20px;
 }
+
+img,
+svg {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

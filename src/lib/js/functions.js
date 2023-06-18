@@ -1,3 +1,22 @@
+import { history, historyLocation } from '$lib/store'
+import { get } from 'svelte/store'
+
+export const updateHistory = (e, side = false) => {
+    const h = get(history)
+    let hl = get(historyLocation)
+    if (side) {
+        if (side == 'left' && hl !== (h.length - 1))
+            historyLocation.set(hl += 1)
+        else if (side == 'right' && hl !== 0)
+            historyLocation.set(hl -= 1)
+    } else {
+        if (e.key == "ArrowLeft" && hl !== (h.length - 1))
+            historyLocation.set(hl += 1)
+        else if (e.key == "ArrowRight" && hl !== 0)
+            historyLocation.set(hl -= 1)
+    }
+}
+
 export const diagonalMove = (m, piece, board, moves, dir) => {
     if (!['fl', 'fr', 'bl', 'br'].find(s => s == dir))
         return null
@@ -11,7 +30,7 @@ export const diagonalMove = (m, piece, board, moves, dir) => {
         if (validCoor && (!(board[y][x] !== null) || ((board[y][x] !== null)
             && !(board[y][x].white == piece.white)))) {
             moves.push({ y, x })
-            if (board[y][x] !== null) 
+            if (board[y][x] !== null)
                 break
         } else {
             break
@@ -32,7 +51,7 @@ export const straightMove = (m, piece, board, moves, dir) => {
         if (validCoor && (!(board[y][x] !== null) || ((board[y][x] !== null)
             && !(board[y][x].white == piece.white)))) {
             moves.push({ y, x })
-            if (board[y][x] !== null) 
+            if (board[y][x] !== null)
                 break
         } else {
             break

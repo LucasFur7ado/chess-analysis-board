@@ -1,12 +1,14 @@
 <script>
 	import Board from './Board.svelte'
 	import Header from './Header.svelte'
+	import Options from './Options.svelte'
 </script>
 
 <section>
 	<div>
 		<Header />
 		<Board />
+		<Options/>
 	</div>
 </section>
 

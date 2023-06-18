@@ -117,7 +117,6 @@ export class Board {
         const b = JSON.parse(JSON.stringify(this.board))
         history.update(h => h = [b, ...h])
         const h = get(history)
-        console.log("HIST => ", h)
     }
 
     locateCheck() {

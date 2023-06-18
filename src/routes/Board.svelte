@@ -1,26 +1,19 @@
 <script>
-	import { board, history } from '$lib/store.js'
+	import { board, history, historyLocation } from '$lib/store.js'
 	import { returnSvg } from '$lib/services/returnSvg.js'
-
-	let historyLocation = 0
-	const updateHistory = (e) => {
-		if (e.key == "ArrowLeft" && historyLocation !== $history.length - 1) 
-			historyLocation += 1
-		else if (e.key == "ArrowRight" && historyLocation !== 0) 
-			historyLocation -= 1
-	}
+	import { updateHistory } from '$lib/js/functions'
 </script>
 
 <svelte:window on:keydown={updateHistory} />
 
 <div id="board">
-	{#each (!historyLocation ? $board.board : $history[historyLocation]) as line, y}
+	{#each (!$historyLocation ? $board.board : $history[$historyLocation]) as line, y}
 		{#each line as piece, x}
 			{#if piece == null}
 				<!-- Empty square -->
 				<div
 					on:keyup={null}
-					on:click={() => !historyLocation ? $board.pieceController(null, { x, y }) : null}
+					on:click={() => !$historyLocation ? $board.pieceController(null, { x, y }) : null}
 					class={(y + x) % 2 == 0 ? 'white' : 'black'}>
 					{#if ($board.possibleMoves !== null 
 					&& $board.possibleMoves.find(m => (m.y == y && m.x == x)))}
@@ -31,7 +24,7 @@
 				<!-- Piece -->
 				<div
 					on:keyup={null}
-					on:click={() => !historyLocation ? $board.pieceController(piece) : null}
+					on:click={() => !$historyLocation ? $board.pieceController(piece) : null}
 					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
                 	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}
