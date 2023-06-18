@@ -4,7 +4,8 @@ import { King } from './king'
 import { Queen } from './queen'
 import { Knight } from './knight'
 import { Bishop } from './bishop'
-import { board } from '$lib/store.js'
+import { get } from 'svelte/store'
+import { board, history } from '$lib/store.js'
 
 export class Config {
     constructor() {
@@ -97,6 +98,7 @@ export class Board {
         this.activePiece.pos = { x: coor.x, y: coor.y }
         this.activePiece = null
         this.possibleMoves = null
+        this.updateHistory()
         board.set(this)
     }
 
@@ -107,7 +109,20 @@ export class Board {
         toBeTaken = undefined
         this.activePiece = null
         this.possibleMoves = null
+        this.updateHistory()
         board.set(this)
+    }
+
+    updateHistory() {
+        const b = this.board.map(l => {
+            return l.map(s => {
+                console.log("S => ", s)
+                return { ...s }
+            })
+        })
+        history.update(h => h = [b, ...h])
+        const h = get(history)
+        console.log("HIST => ", h)
     }
 
     locateCheck() {

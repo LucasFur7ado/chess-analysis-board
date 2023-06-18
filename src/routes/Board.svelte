@@ -1,10 +1,23 @@
 <script>
-	import { board } from '$lib/store.js'
+	import { board, history } from '$lib/store.js'
 	import { returnSvg } from '$lib/services/returnSvg.js'
+
+	let historyLocation = 0
+	const updateHistory = (e) => {
+		if (e.key == "ArrowLeft") {
+			historyLocation += 1
+			console.log("HISTORY => ", historyLocation)
+		} else if (e.key == "ArrowRight") {
+			historyLocation -= 1
+			console.log("HISTORY => ", historyLocation)
+		}
+	};
 </script>
 
+<svelte:window on:keydown={updateHistory} />
+
 <div id="board">
-	{#each $board.board as line, y}
+	{#each $history[historyLocation] as line, y}
 		{#each line as piece, x}
 			{#if piece == null}
 				<!-- Empty square -->
@@ -50,7 +63,7 @@
 	}
 
 	#board {
-		gap: 2px;
+		gap: 0px;
 		display: grid;
 		position: relative;
 		grid-template-columns: repeat(8, 50px);

@@ -1,4 +1,7 @@
 import { Board } from '$lib/js/board'
 import { writable } from 'svelte/store'
 
-export const board = writable(new Board(true))
+const newBoard = new Board(true)
+
+export const board = writable(newBoard)
+export const history = writable([newBoard.board])

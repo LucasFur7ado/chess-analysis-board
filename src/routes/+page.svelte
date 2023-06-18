@@ -1,6 +1,6 @@
 <script>
-	import Header from './Header.svelte'
 	import Board from './Board.svelte'
+	import Header from './Header.svelte'
 </script>
 
 <section>

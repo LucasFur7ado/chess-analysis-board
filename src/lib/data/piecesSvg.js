@@ -17,7 +17,7 @@ export const dotSvg = (white) => {
 export const pawnSvg = (white) => {
     return `
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-    width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+    width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
     preserveAspectRatio="xMidYMid meet">
     <g transform="translate(-1650.00000, 920.000000) scale(0.200000,-0.200000)"
     fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
@@ -44,7 +44,7 @@ export const pawnSvg = (white) => {
 export const knightSvg = (white) => {
     return `
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-    width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+    width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
     preserveAspectRatio="xMidYMid meet">
     <g transform="translate(240.00000, 920.000000) scale(0.200000,-0.200000)"
     fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
@@ -75,7 +75,7 @@ export const knightSvg = (white) => {
 export const bishopSvg = (white) => {
     return `
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-    width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+    width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
     preserveAspectRatio="xMidYMid meet">
     <g transform="translate(-680.00000, 920.000000) scale(0.200000,-0.200000)"
     fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
@@ -119,7 +119,7 @@ export const bishopSvg = (white) => {
 export const rookSvg = (white) => {
     return `
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-    width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+    width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
     preserveAspectRatio="xMidYMid meet">
     <g transform="translate(-1580.00000, 1850.000000) scale(0.200000,-0.200000)"
     fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
@@ -141,7 +141,7 @@ export const rookSvg = (white) => {
 
 export const kingSvg = (white) => {
     return `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
 preserveAspectRatio="xMidYMid meet">
 <g transform="translate(190.00000,1900.000000) scale(0.200000,-0.200000)"
 fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
@@ -181,7 +181,7 @@ c-131 -63 -439 -101 -926 -113 l-222 -5 -115 153 c-210 278 -292 431 -312 577
 
 export const queenSvg = (white) => {
     return `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-width="50px" height="50px" viewBox="0 0 1280.000000 938.000000"
+width="60px" height="60px" viewBox="0 0 1280.000000 938.000000"
 preserveAspectRatio="xMidYMid meet">
 <g transform="translate(-650.00000,1950.000000) scale(0.200000,-0.200000)"
 fill=${white ? "var(--white)" : "var(--black)"} stroke="none">
