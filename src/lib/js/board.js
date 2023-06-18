@@ -114,12 +114,7 @@ export class Board {
     }
 
     updateHistory() {
-        const b = this.board.map(l => {
-            return l.map(s => {
-                console.log("S => ", s)
-                return { ...s }
-            })
-        })
+        const b = JSON.parse(JSON.stringify(this.board))
         history.update(h => h = [b, ...h])
         const h = get(history)
         console.log("HIST => ", h)

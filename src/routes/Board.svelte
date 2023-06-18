@@ -4,26 +4,23 @@
 
 	let historyLocation = 0
 	const updateHistory = (e) => {
-		if (e.key == "ArrowLeft") {
+		if (e.key == "ArrowLeft" && historyLocation !== $history.length - 1) 
 			historyLocation += 1
-			console.log("HISTORY => ", historyLocation)
-		} else if (e.key == "ArrowRight") {
+		else if (e.key == "ArrowRight" && historyLocation !== 0) 
 			historyLocation -= 1
-			console.log("HISTORY => ", historyLocation)
-		}
-	};
+	}
 </script>
 
 <svelte:window on:keydown={updateHistory} />
 
 <div id="board">
-	{#each $history[historyLocation] as line, y}
+	{#each (!historyLocation ? $board.board : $history[historyLocation]) as line, y}
 		{#each line as piece, x}
 			{#if piece == null}
 				<!-- Empty square -->
 				<div
 					on:keyup={null}
-					on:click={() => $board.pieceController(null, { x, y })}
+					on:click={() => !historyLocation ? $board.pieceController(null, { x, y }) : null}
 					class={(y + x) % 2 == 0 ? 'white' : 'black'}>
 					{#if ($board.possibleMoves !== null 
 					&& $board.possibleMoves.find(m => (m.y == y && m.x == x)))}
@@ -34,7 +31,7 @@
 				<!-- Piece -->
 				<div
 					on:keyup={null}
-					on:click={() => $board.pieceController(piece)}
+					on:click={() => !historyLocation ? $board.pieceController(piece) : null}
 					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
                 	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}

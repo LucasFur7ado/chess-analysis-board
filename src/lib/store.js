@@ -4,4 +4,4 @@ import { writable } from 'svelte/store'
 const newBoard = new Board(true)
 
 export const board = writable(newBoard)
-export const history = writable([newBoard.board])
+export const history = writable([JSON.parse(JSON.stringify(newBoard.board))])
