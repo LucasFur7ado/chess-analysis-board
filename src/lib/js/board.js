@@ -54,6 +54,7 @@ export class Board {
             return null
         }
         // Show possible moves
+        console.log("1")
         const sameColor = (this.activePiece?.white == piece?.white)
         if (this.activePiece == null || sameColor
             || (piece && !sameColor && !this.possibleMoves?.find(m => {
@@ -63,6 +64,7 @@ export class Board {
             this.showMoves(piece)
             return null
         }
+        console.log("2")
         // Move 
         if (this.possibleMoves !== null && validMove) {
             this.move(coor)
@@ -73,6 +75,7 @@ export class Board {
             if (((m.x == piece.pos.x) && (m.y == piece.pos.y)))
                 return m
         })
+        console.log("VALID => ", validTake)
         if ((piece.white !== this.activePiece.white) && validTake) {
             this.take(this.activePiece, piece)
             return null

@@ -1,4 +1,6 @@
 export const diagonalMove = (m, piece, board, moves, dir) => {
+    if(!['fl', 'fr', 'bl', 'br'].find(s => s == dir))
+        return null 
     const f = (dir == 'fr' || dir == 'fl')
     const l = (dir == 'bl' || dir == 'fl')
     for (let i = 1; i < (m.steps == -1 ? 8 : m.steps + 1); i++) {
@@ -16,6 +18,8 @@ export const diagonalMove = (m, piece, board, moves, dir) => {
 }
 
 export const straightMove = (m, piece, board, moves, dir) => {
+    if(!['f', 'r', 'b', 'l'].find(s => s == dir))
+        return null 
     const f = (dir == 'f')
     const s = (dir == 'r' || dir == 'l') 
     for (let i = 1; i < (m.steps == -1 ? 8 : m.steps + 1); i++) {
@@ -23,10 +27,11 @@ export const straightMove = (m, piece, board, moves, dir) => {
         const y = s ? piece.pos.y : (preY)
         const x = s ? (piece.pos.x + (dir == 'r' ? +i : -i)) : piece.pos.x  
         const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
-        if (validCoor && board[y][x] !== null) {
-            break
-        } else {
+        if (validCoor && (!(board[y][x] !== null) || ((board[y][x] !== null)
+            && !(board[y][x].white == piece.white)))) {
             moves.push({ y, x })
+        } else {
+            break
         }
     }
 }
