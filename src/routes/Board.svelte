@@ -1,10 +1,10 @@
 <script>
 	import { board, history, historyLocation } from '$lib/store.js'
+	import { keyboardEventController } from '$lib/js/functions'
 	import { returnSvg } from '$lib/services/returnSvg.js'
-	import { updateHistory } from '$lib/js/functions'
 </script>
 
-<svelte:window on:keydown={updateHistory} />
+<svelte:window on:keydown={keyboardEventController} />
 
 <div id="board">
 	{#each (!$historyLocation ? $board.board : $history[$historyLocation]) as line, y}

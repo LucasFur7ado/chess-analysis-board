@@ -2,6 +2,15 @@ import { board as boardStore, history, historyLocation } from '$lib/store'
 import { get } from 'svelte/store'
 import { Board } from './board'
 
+export const keyboardEventController = (e) => {
+    switch (e.key) {
+        case "ArrowLeft": return updateHistory("left")
+        case "ArrowRight": return updateHistory("right")
+        case "r": return resetBoard()
+        case "i": return null
+    }
+}
+
 export const resetBoard = () => {
     const newBoard = new Board()
     boardStore.set(newBoard)
@@ -9,20 +18,13 @@ export const resetBoard = () => {
     history.set([JSON.parse(JSON.stringify(newBoard.board))])
 }
 
-export const updateHistory = (e, side = false) => {
+export const updateHistory = (side = false) => {
     const h = get(history)
     let hl = get(historyLocation)
-    if (side) {
-        if (side == 'left' && hl !== (h.length - 1))
-            historyLocation.set(hl += 1)
-        else if (side == 'right' && hl !== 0)
-            historyLocation.set(hl -= 1)
-    } else {
-        if (e.key == "ArrowLeft" && hl !== (h.length - 1))
-            historyLocation.set(hl += 1)
-        else if (e.key == "ArrowRight" && hl !== 0)
-            historyLocation.set(hl -= 1)
-    }
+    if (side == 'left' && hl !== (h.length - 1))
+        historyLocation.set(hl += 1)
+    else if (side == 'right' && hl !== 0)
+        historyLocation.set(hl -= 1)
 }
 
 export const diagonalMove = (m, piece, board, moves, dir) => {
@@ -49,10 +51,12 @@ export const diagonalMove = (m, piece, board, moves, dir) => {
 export const straightMove = (m, piece, board, moves, dir) => {
     if (!['f', 'r', 'b', 'l'].find(s => s == dir))
         return null
+    const boardS = get(boardStore)
     const f = (dir == 'f')
     const s = (dir == 'r' || dir == 'l')
     for (let i = 1; i < (m.steps == -1 ? 8 : m.steps + 1); i++) {
-        const preY = piece.pos.y - (piece.white ? (f ? +i : -i) : (f ? -i : +i))
+        const preY = piece.pos.y - ((piece.white && boardS.whiteIsBottom
+            || !piece.white && !boardS.whiteIsBottom) ? (f ? +i : -i) : (f ? -i : +i))
         const y = s ? piece.pos.y : (preY)
         const x = s ? (piece.pos.x + (dir == 'r' ? +i : -i)) : piece.pos.x
         const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)

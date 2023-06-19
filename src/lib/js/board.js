@@ -15,7 +15,7 @@ export class Config {
 
 export class Board {
     constructor() {
-        let board = [[], [], [], [], [], [], [], []], white = true 
+        let board = [[], [], [], [], [], [], [], []], white = true
         for (let i = 0; i < 8; i++) {
             if (i == 0) {
                 board[0] = [
@@ -38,6 +38,7 @@ export class Board {
         this.board = board
         this.check = false
         this.activePiece = null
+        this.whiteIsBottom = true 
         this.possibleMoves = null
         this.config = new Config()
     }
@@ -120,14 +121,29 @@ export class Board {
     }
 
     invertBoard() {
-        for(let y = 0; y < 4 ; y++) {
-            for(let x = 0; x < 8 ; x++) {
-                const aux = this.board[y][x]
-                this.board[y][x] = this.board[7 - y][7 - x]
-                this.board[7 - y][7 - x] = aux 
-            }
+        const invert = (b) => {
+            for (let y = 0; y < 4; y++)
+                for (let x = 0; x < 8; x++) {
+                    const aux = b[y][x]
+                    b[y][x] = b[7 - y][7 - x]
+                    b[7 - y][7 - x] = aux
+                    if (b[y][x] !== null)
+                        b[y][x].pos = { x, y }
+                    if (b[7 - y][7 - x] !== null)
+                        b[7 - y][7 - x].pos = {
+                            x: 7 - x,
+                            y: 7 - y
+                        }
+                }
         }
-        this.white = !this.white 
+        invert(this.board)
+        // Invert all history records
+        history.update(h => h = h.map(hh => {
+            invert(hh)
+            return hh
+        }))
+        this.whiteIsBottom = !this.whiteIsBottom
+        this.hideMoves()
         board.set(this)
     }
 
@@ -137,10 +153,6 @@ export class Board {
 
     coronate(pawn) {
         // Coronate a pawn
-    }
-
-    isValidMove(piece, pos) {
-
     }
 }
 

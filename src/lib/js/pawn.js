@@ -20,8 +20,9 @@ export class Pawn extends Piece {
         }
         const sum = (this.white ? 1 : -1)
         const y = this.pos.y - sum
-        const x = this.pos.x + sum 
+        const x = this.pos.x + sum
         const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
+        // Able to take 
         if (validCoor && board[y][x]) {
             this.moves = [
                 ...this.moves,
@@ -31,7 +32,7 @@ export class Pawn extends Piece {
                 }
             ]
         }
-        if (validCoor && board[y][x]) {
+        if (validCoor && board[y][(this.white ? x - 2 : x + 2)]) {
             this.moves = [
                 ...this.moves,
                 {
@@ -40,5 +41,6 @@ export class Pawn extends Piece {
                 }
             ]
         }
+        // TODO: En passant
     }
 }
