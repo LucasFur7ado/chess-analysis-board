@@ -14,8 +14,8 @@ export class Config {
 }
 
 export class Board {
-    constructor(white) {
-        let board = [[], [], [], [], [], [], [], []]
+    constructor() {
+        let board = [[], [], [], [], [], [], [], []], white = true 
         for (let i = 0; i < 8; i++) {
             if (i == 0) {
                 board[0] = [
@@ -117,6 +117,18 @@ export class Board {
         const b = JSON.parse(JSON.stringify(this.board))
         history.update(h => h = [b, ...h])
         const h = get(history)
+    }
+
+    invertBoard() {
+        for(let y = 0; y < 4 ; y++) {
+            for(let x = 0; x < 8 ; x++) {
+                const aux = this.board[y][x]
+                this.board[y][x] = this.board[7 - y][7 - x]
+                this.board[7 - y][7 - x] = aux 
+            }
+        }
+        this.white = !this.white 
+        board.set(this)
     }
 
     locateCheck() {

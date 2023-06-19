@@ -1,5 +1,13 @@
-import { history, historyLocation } from '$lib/store'
+import { board as boardStore, history, historyLocation } from '$lib/store'
 import { get } from 'svelte/store'
+import { Board } from './board'
+
+export const resetBoard = () => {
+    const newBoard = new Board()
+    boardStore.set(newBoard)
+    historyLocation.set(0)
+    history.set([JSON.parse(JSON.stringify(newBoard.board))])
+}
 
 export const updateHistory = (e, side = false) => {
     const h = get(history)
