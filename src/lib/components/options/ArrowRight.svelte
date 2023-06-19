@@ -1,10 +1,10 @@
 <script>
     import Option from "../Option.svelte"
     import { historyLocation } from "$lib/store"
-    import { updateHistory } from "$lib/js/functions"
+    import { updateHistoryLocation } from "$lib/js/functions"
 </script>
 
-<div on:click={(e) => updateHistory(e, "right")} on:keyup={null}>
+<div on:click={(e) => updateHistoryLocation("right")} on:keyup={null}>
     <Option pointer={$historyLocation > 0}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -4,10 +4,13 @@ import { Board } from './board'
 
 export const keyboardEventController = (e) => {
     switch (e.key) {
-        case "ArrowLeft": return updateHistory("left")
-        case "ArrowRight": return updateHistory("right")
+        case "ArrowLeft": return updateHistoryLocation("left")
+        case "ArrowRight": return updateHistoryLocation("right")
         case "r": return resetBoard()
-        case "i": return null
+        case "i": {
+            const boardS = get(boardStore)
+            return boardS.invertBoard()
+        }
     }
 }
 
@@ -18,7 +21,7 @@ export const resetBoard = () => {
     history.set([JSON.parse(JSON.stringify(newBoard.board))])
 }
 
-export const updateHistory = (side = false) => {
+export const updateHistoryLocation = (side = false) => {
     const h = get(history)
     let hl = get(historyLocation)
     if (side == 'left' && hl !== (h.length - 1))
@@ -30,12 +33,15 @@ export const updateHistory = (side = false) => {
 export const diagonalMove = (m, piece, board, moves, dir) => {
     if (!['fl', 'fr', 'bl', 'br'].find(s => s == dir))
         return null
+    const boardS = get(boardStore)
+    const cond = ((piece.white && boardS.whiteIsBottom) || 
+        (!piece.white && !boardS.whiteIsBottom))
     const f = (dir == 'fr' || dir == 'fl')
     const l = (dir == 'bl' || dir == 'fl')
     for (let i = 1; i < (m.steps == -1 ? 8 : m.steps + 1); i++) {
-        const y = piece.pos.y - (f ? (piece.white ? i : -i) : (- (piece.white ? i : -i)))
-        const x = piece.pos.x - (l ? (piece.white ? i : -i) : (- (piece.white ? i : -i)))
-        console.log(x, y)
+        const finalI = cond ? i : -i
+        const y = piece.pos.y - (f ? finalI : (- finalI))
+        const x = piece.pos.x - (l ? finalI : (- finalI))
         const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
         if (validCoor && (!(board[y][x] !== null) || ((board[y][x] !== null)
             && !(board[y][x].white == piece.white)))) {

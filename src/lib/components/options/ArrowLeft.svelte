@@ -1,10 +1,10 @@
 <script>
   import Option from "../Option.svelte"
-  import { updateHistory } from "$lib/js/functions"
+  import { updateHistoryLocation } from "$lib/js/functions"
   import { historyLocation, history } from "$lib/store"
 </script>
 
-<div on:click={(e) => updateHistory(e, "left")} on:keyup={null}>
+<div on:click={(e) => updateHistoryLocation("left")} on:keyup={null}>
   <Option
     pointer={($history.length - 1 && !$historyLocation) ||
       $historyLocation < $history.length - 1}

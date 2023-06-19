@@ -1,3 +1,5 @@
+import { board as boardStore } from '$lib/store'
+import { get } from 'svelte/store'
 import { Piece } from './piece'
 
 export class Pawn extends Piece {
@@ -9,6 +11,7 @@ export class Pawn extends Piece {
 
     conditions(board) {
         this.resetMoves()
+        const boardS = get(boardStore)
         if (this.pos.y == 1 || this.pos.y == 6) {
             this.moves = this.moves.map(m => {
                 if (m.dir == 'f') return {
@@ -18,7 +21,9 @@ export class Pawn extends Piece {
                 return m
             })
         }
-        const sum = (this.white ? 1 : -1)
+        const cond = ((this.white && boardS.whiteIsBottom) || 
+        (!this.white && !boardS.whiteIsBottom))
+        const sum = (cond ? 1 : -1)
         const y = this.pos.y - sum
         const x = this.pos.x + sum
         const validCoor = (y >= 0 && x >= 0 && y < 8 && x < 8)
@@ -32,7 +37,8 @@ export class Pawn extends Piece {
                 }
             ]
         }
-        if (validCoor && board[y][(this.white ? x - 2 : x + 2)]) {
+        if (validCoor && board[y][(cond ? x - 2 : x + 2)]) {
+            console.log(board[y][x])
             this.moves = [
                 ...this.moves,
                 {
@@ -41,6 +47,7 @@ export class Pawn extends Piece {
                 }
             ]
         }
+        console.log("MOVES => ", this.moves)
         // TODO: En passant
     }
 }
