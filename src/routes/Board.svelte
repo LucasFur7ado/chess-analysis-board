@@ -28,6 +28,10 @@
 					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
                 	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}
+					{#if ($board.possibleMoves !== null 
+						&& $board.possibleMoves.find(m => (m.y == y && m.x == x)))}
+						{@html returnSvg('circle', (y + x) % 2 == 0)}
+					{/if}	
 				</div>
 			{/if}
 		{/each}
@@ -39,13 +43,16 @@
 		background: #2f2f2f !important;
 	}
 
+	.white, .black {
+		border-radius: 5px;
+		position: relative;
+	}
+
 	.black {
 		border: 1px solid var(--black-square-border);
-		border-radius: 5px;
 	}
 	.white {
 		background-color: var(--white-square);
-		border-radius: 5px;
 	}
 
 	.square {
@@ -56,8 +63,8 @@
 		gap: 0px;
 		display: grid;
 		position: relative;
-		grid-template-columns: repeat(8, 50px);
-		grid-template-rows: repeat(8, 50px);
+		grid-template-columns: repeat(8, 55px);
+		grid-template-rows: repeat(8, 55px);
 	}
 
 	#board > div {

@@ -47,7 +47,6 @@ export class Pawn extends Piece {
                 }
             ]
         }
-        console.log("MOVES => ", this.moves)
         // TODO: En passant
     }
 }
