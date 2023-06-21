@@ -14,6 +14,26 @@ export const keyboardEventController = (e) => {
     }
 }
 
+export const historyToBoard = (h) => {
+    const board = get(boardStore)
+    let newBoard = [[],[],[],[],[],[],[],[]]
+    for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+            const historyPiece = h[y][x]
+            let boardPiece = null 
+            for (let k = 0; k < 8; k++) {
+                boardPiece = board.board[k].find(p => p?.id == historyPiece?.id)
+                if(boardPiece) break
+            }
+            if(boardPiece == undefined)
+                boardPiece = null 
+            newBoard[y][x] = boardPiece
+        }
+    }
+    console.log(newBoard)
+    boardStore.set(newBoard)
+}
+
 export const resetBoard = () => {
     const newBoard = new Board()
     boardStore.set(newBoard)
@@ -34,7 +54,7 @@ export const diagonalMove = (m, piece, board, moves, dir) => {
     if (!['fl', 'fr', 'bl', 'br'].find(s => s == dir))
         return null
     const boardS = get(boardStore)
-    const cond = ((piece.white && boardS.whiteIsBottom) || 
+    const cond = ((piece.white && boardS.whiteIsBottom) ||
         (!piece.white && !boardS.whiteIsBottom))
     const f = (dir == 'fr' || dir == 'fl')
     const l = (dir == 'bl' || dir == 'fl')

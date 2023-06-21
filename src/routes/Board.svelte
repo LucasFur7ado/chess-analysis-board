@@ -1,6 +1,6 @@
 <script>
+	import { keyboardEventController, historyToBoard } from '$lib/js/functions'
 	import { board, history, historyLocation } from '$lib/store.js'
-	import { keyboardEventController } from '$lib/js/functions'
 	import { returnSvg } from '$lib/services/returnSvg.js'
 </script>
 
@@ -24,7 +24,14 @@
 				<!-- Piece -->
 				<div
 					on:keyup={null}
-					on:click={() => !$historyLocation ? $board.pieceController(piece) : null}
+					on:click={() => {
+						if($historyLocation) {
+							historyToBoard($history[$historyLocation])
+							return null
+						} else {
+							$board.pieceController(piece)
+						}
+					}}
 					class={`${(y + x) % 2 == 0 ? 'white' : 'black'} 
                 	${$board.activePiece?.id == piece?.id ? 'active' : ''} square`}>
 					{@html returnSvg(piece.type, piece.white)}
