@@ -5,8 +5,8 @@
 <header>
 	<div>
 		<h1>Chess analysis board</h1>
-		<a href="https://lucasfurtado.es" target="_blank">
-			by lucasfurtado.es
+		<a href="https://lucasfurtado.xyz" target="_blank">
+			by lucasfurtado.xyz
 		</a>
 	</div>
 	<Menu />
